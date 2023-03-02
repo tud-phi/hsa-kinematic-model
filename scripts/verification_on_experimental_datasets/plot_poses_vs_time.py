@@ -5,7 +5,7 @@ matplotlib.use("Qt5Cairo")
 from jax import jit, vmap
 from jax import numpy as jnp
 import matplotlib.pyplot as plt
-
+from pathlib import Path
 import spcs_kinematics.jax_math as jmath
 
 plt.rcParams.update(
@@ -16,9 +16,14 @@ plt.rcParams.update(
     }
 )
 
-data = jnp.load(
-    "scripts/verification_on_experimental_datasets/plotting_data/lemniscate_inverse_kinematics_results.npz"
-)
+# DATASET_DIR = Path("data/experiments/20221011_174514")  # elongation to 180°
+# DATASET_DIR = Path("data/experiments/20221011_184131")  # bending to 180°
+DATASET_DIR = Path("data/experiments/20221012_153814")  # lemniscate to 210°
+# DATASET_DIR = Path("data/experiments/20221012_103309")  # twisting to 180°
+# DATASET_DIR = Path("data/experiments/20221012_140717")  # combined to 180°
+
+# load data
+data = jnp.load(str(DATASET_DIR / "inverse_kinematics_results_spcs_n_S-2.npz"))
 
 # number of samples which are cut-off at the end of the dataset
 num_cut_off_samples = 1

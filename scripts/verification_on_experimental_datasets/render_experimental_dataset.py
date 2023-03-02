@@ -1,16 +1,20 @@
 from jax import jit, vmap
 from jax import numpy as jnp
-
+from pathlib import Path
 import spcs_kinematics.jax_math as jmath
 from spcs_kinematics.kinematic_parametrizations import SelectivePiecewiseConstantStrain
 
 from src.visualization.pyvista_scene import PyvistaScene
 
+# DATASET_DIR = Path("data/experiments/20221011_174514")  # elongation to 180°
+# DATASET_DIR = Path("data/experiments/20221011_184131")  # bending to 180°
+DATASET_DIR = Path("data/experiments/20221012_153814")  # lemniscate to 210°
+# DATASET_DIR = Path("data/experiments/20221012_103309")  # twisting to 180°
+# DATASET_DIR = Path("data/experiments/20221012_140717")  # combined to 180°
 
-path = f"scripts/verification_on_experimental_datasets/plotting_data"
-dataset_name = "lemniscate_inverse_kinematics_results"
+# load data
+data = jnp.load(str(DATASET_DIR / "inverse_kinematics_results_spcs_n_S-2.npz"))
 
-data = jnp.load(f"{path}/{dataset_name}.npz")
 l0 = data["l0"]
 s_ss = data["s_ss"]
 T_ss = data["T_ss"]
@@ -26,14 +30,14 @@ rod_params = dict(
 )
 
 
-vhsa_pcs_forward_kinematics = jit(
+vspcs_forward_kinematics = jit(
     vmap(
         vmap(
-            jmath.hsa_pcs_forward_kinematics,
-            in_axes=(None, None, -1, None, None, None),
+            jmath.spcs_forward_kinematics,
+            in_axes=(None, None, None, -1, None, None, None),
             out_axes=-1,
         ),
-        in_axes=(None, None, None, None, 0, None),
+        in_axes=(None, None, None, None, None, 0, None),
         out_axes=0,
     )
 )
@@ -65,7 +69,8 @@ matmul_vmap_time_back = jit(vmap(  # vmap for time
 if __name__ == "__main__":
     kinematics = SelectivePiecewiseConstantStrain(
         l0=l0,
-        strain_selector=data["strain_selector"],
+        strain_selector_cs=data["strain_selector_cs"],
+        strain_selector_pcs=data["strain_selector_pcs"],
         rest_strain=data["rest_strain"],
     )
 
@@ -76,8 +81,9 @@ if __name__ == "__main__":
     s_plotting_part2 = jnp.linspace(start=s_ss[0, 1], stop=s_ss[0, 2], num=51)
     s_plotting = jnp.concatenate([s_plotting_part1, s_plotting_part2])
 
-    T_hat_plotting_ss = vhsa_pcs_forward_kinematics(
-        kinematics.strain_basis,
+    T_hat_plotting_ss = vspcs_forward_kinematics(
+        kinematics.strain_basis_cs,
+        kinematics.strain_basis_pcs,
         kinematics.rest_strain,
         s_plotting,
         l0,
