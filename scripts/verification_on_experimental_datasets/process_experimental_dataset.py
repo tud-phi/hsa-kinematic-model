@@ -12,7 +12,9 @@ from pathlib import Path
 import warnings
 
 
-from scripts.verification_on_experimental_datasets.plotting_utils import plot_experimental_dataset
+from scripts.verification_on_experimental_datasets.plotting_utils import (
+    plot_experimental_dataset,
+)
 from src.visualization import (
     plot_rod_shape,
     plot_inverse_kinematics_iterations,
@@ -50,7 +52,9 @@ NUM_PCS_SEGMENTS = 2
 STRAIN_SELECTOR_CS = jnp.array([False, False, True, False, False, True])
 STRAIN_SELECTOR_PCS = jnp.array([True, True, False, True, True, False])
 
-GAMMA = 2e0 * jnp.ones((1 + STRAIN_SELECTOR_CS.sum() + NUM_PCS_SEGMENTS * STRAIN_SELECTOR_PCS.sum(),))
+GAMMA = 2e0 * jnp.ones(
+    (1 + STRAIN_SELECTOR_CS.sum() + NUM_PCS_SEGMENTS * STRAIN_SELECTOR_PCS.sum(),)
+)
 GAMMA = GAMMA.at[0].set(0.0)
 # Increase the step size for the twist strain
 # Nominal
@@ -395,7 +399,9 @@ if __name__ == "__main__":
             sss_idx % PLOT_EVERY_NTH_SAMPLE == 0 or sss_idx == indices_sss.shape[0] - 1
         ):
             s_plotting = jnp.linspace(start=0, stop=s_ts[sample_idx, -1], num=20)
-            T_hat_plotting = kinematics.forward_kinematics(s_plotting, configuration=q_hat)
+            T_hat_plotting = kinematics.forward_kinematics(
+                s_plotting, configuration=q_hat
+            )
             # plot the ground-truth and the estimated rod shape
             plot_rod_shape(T=T, T_hat=T_hat_plotting, oal=0.01)
 
@@ -414,12 +420,18 @@ if __name__ == "__main__":
     output_data["rest_strain"] = kinematics.rest_strain
 
     # compute total error
-    output_data["rmse_t"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_t_ss'], 2)))
-    output_data["rmse_quat"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_quat_ss'], 2)))
-    output_data["rmse_euler_xyz"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_euler_xyz_ss'], 2), axis=0))
+    output_data["rmse_t"] = jnp.sqrt(jnp.mean(jnp.power(output_data["rmse_t_ss"], 2)))
+    output_data["rmse_quat"] = jnp.sqrt(
+        jnp.mean(jnp.power(output_data["rmse_quat_ss"], 2))
+    )
+    output_data["rmse_euler_xyz"] = jnp.sqrt(
+        jnp.mean(jnp.power(output_data["rmse_euler_xyz_ss"], 2), axis=0)
+    )
 
     jnp.savez(
-        str(DATASET_DIR / f"inverse_kinematics_results{kinematic_settings_postfix}.npz"),
+        str(
+            DATASET_DIR / f"inverse_kinematics_results{kinematic_settings_postfix}.npz"
+        ),
         **output_data,
     )
 

@@ -43,8 +43,12 @@ class PyvistaScene:
             )
         self.tip_down = tip_down
         self.floor_center = floor_center if floor_center is not None else (0, 0, 0)
-        self.floor_size = floor_size if floor_size is not None else (1.5 * self.L0, 1.5 * self.L0)
-        self.light_position = light_position if light_position is not None else (0, 0, 5 * self.L0)
+        self.floor_size = (
+            floor_size if floor_size is not None else (1.5 * self.L0, 1.5 * self.L0)
+        )
+        self.light_position = (
+            light_position if light_position is not None else (0, 0, 5 * self.L0)
+        )
 
         self.backbone_radius = 0.002
 
@@ -57,11 +61,14 @@ class PyvistaScene:
         self.pl = None
 
         # jax function for rapidly computing the rod mesh
-        self.rod_mesh_points_fun = jax.jit(jax.vmap(
-            fun=jmath.generate_infinitesimal_cylindrical_mesh_points,
-            in_axes=(-1, None, None, None, None),
-            out_axes=-1,
-        ), static_argnames=("r_resolution", "phi_resolution"))
+        self.rod_mesh_points_fun = jax.jit(
+            jax.vmap(
+                fun=jmath.generate_infinitesimal_cylindrical_mesh_points,
+                in_axes=(-1, None, None, None, None),
+                out_axes=-1,
+            ),
+            static_argnames=("r_resolution", "phi_resolution"),
+        )
 
     def run(
         self,
@@ -176,11 +183,19 @@ class PyvistaScene:
                 T=T_gt,
                 show_backbone=self.gt_settings.get("show_backbone", False),
                 show_hsa=self.gt_settings.get("show_hsa", True),
-                show_orientation_arrows=self.gt_settings.get("show_orientation_arrows", True),
-                num_orientation_arrows=self.gt_settings.get("num_orientation_arrows", 10),
-                orientation_arrow_indices=self.gt_settings.get("orientation_arrow_indices", None),
+                show_orientation_arrows=self.gt_settings.get(
+                    "show_orientation_arrows", True
+                ),
+                num_orientation_arrows=self.gt_settings.get(
+                    "num_orientation_arrows", 10
+                ),
+                orientation_arrow_indices=self.gt_settings.get(
+                    "orientation_arrow_indices", None
+                ),
                 opacity=self.gt_settings.get("opacity", 1.0),
-                orientation_arrows_opacity=self.gt_settings.get("orientation_arrows_opacity", None),
+                orientation_arrows_opacity=self.gt_settings.get(
+                    "orientation_arrows_opacity", None
+                ),
                 ambient=self.gt_settings.get("ambient", 1.0),
                 diffuse=self.gt_settings.get("diffuse", 0.5),
                 specular=self.gt_settings.get("specular", 0.0),
@@ -190,11 +205,19 @@ class PyvistaScene:
                 T=T_hat,
                 show_backbone=self.hat_settings.get("show_backbone", False),
                 show_hsa=self.hat_settings.get("show_hsa", True),
-                show_orientation_arrows=self.hat_settings.get("show_orientation_arrows", True),
-                num_orientation_arrows=self.hat_settings.get("num_orientation_arrows", 10),
-                orientation_arrow_indices=self.hat_settings.get("orientation_arrow_indices", None),
+                show_orientation_arrows=self.hat_settings.get(
+                    "show_orientation_arrows", True
+                ),
+                num_orientation_arrows=self.hat_settings.get(
+                    "num_orientation_arrows", 10
+                ),
+                orientation_arrow_indices=self.hat_settings.get(
+                    "orientation_arrow_indices", None
+                ),
                 opacity=self.hat_settings.get("opacity", 0.5),
-                orientation_arrows_opacity=self.hat_settings.get("orientation_arrows_opacity", None),
+                orientation_arrows_opacity=self.hat_settings.get(
+                    "orientation_arrows_opacity", None
+                ),
                 ambient=self.hat_settings.get("ambient", 1.0),
                 diffuse=self.hat_settings.get("diffuse", 0.5),
                 specular=self.hat_settings.get("specular", 0.0),
@@ -249,10 +272,10 @@ class PyvistaScene:
             # target camera orientation: x into the picture, y to the right, z down
             self.pl.camera_position = "xz"
             self.pl.camera.roll = 180  # rotate camera to put tip down
-            self.pl.camera.azimuth = 90  # rotate camera around z-axis to put the y-axis to the right
-            self.pl.camera.elevation = (
-                4.5  # slightly tilt down
+            self.pl.camera.azimuth = (
+                90  # rotate camera around z-axis to put the y-axis to the right
             )
+            self.pl.camera.elevation = 4.5  # slightly tilt down
         else:
             self.pl.camera_position = "xz"
             self.pl.camera.elevation = (
@@ -318,7 +341,8 @@ class PyvistaScene:
             outputs["hsa_mesh"] = self._generate_rod_mesh(
                 T,
                 outside_radius=self.rod_params["outside_radius"],
-                inside_radius=self.rod_params["outside_radius"] - self.rod_params["wall_thickness"],
+                inside_radius=self.rod_params["outside_radius"]
+                - self.rod_params["wall_thickness"],
             )
 
             outputs["hsa_kwargs"] = dict(
@@ -341,7 +365,7 @@ class PyvistaScene:
                     stop=T.shape[-1] - 1,
                     num=min(num_orientation_arrows, T.shape[-1]),
                     endpoint=True,
-                    dtype=int
+                    dtype=int,
                 )
             else:
                 outputs["orientation_arrow_indices"] = orientation_arrow_indices
@@ -355,7 +379,9 @@ class PyvistaScene:
                 ) = self._draw_orientation_arrows(
                     T[..., k],
                     arrow_selector=[True, True, False],
-                    opacity=orientation_arrows_opacity if orientation_arrows_opacity is not None else opacity,
+                    opacity=orientation_arrows_opacity
+                    if orientation_arrows_opacity is not None
+                    else opacity,
                     ambient=ambient,
                     diffuse=diffuse,
                     specular=specular,
@@ -388,14 +414,17 @@ class PyvistaScene:
             outputs["hsa_mesh"] = self._generate_rod_mesh(
                 T,
                 outside_radius=self.rod_params["outside_radius"],
-                inside_radius=self.rod_params["outside_radius"] - self.rod_params["wall_thickness"],
+                inside_radius=self.rod_params["outside_radius"]
+                - self.rod_params["wall_thickness"],
             )
             outputs["hsa_actor"] = self.pl.add_mesh(
                 outputs["hsa_mesh"], **outputs["hsa_kwargs"]
             )
 
         if "orientations" in outputs:
-            for k, po_dict in zip(outputs["orientation_arrow_indices"], outputs["orientations"]):
+            for k, po_dict in zip(
+                outputs["orientation_arrow_indices"], outputs["orientations"]
+            ):
                 (
                     po_dict["arrow_meshes"],
                     po_dict["arrow_mesh_kwargs"],
@@ -410,12 +439,12 @@ class PyvistaScene:
                 )
 
     def _generate_rod_mesh(
-            self,
-            T_s: np.ndarray,
-            outside_radius: float,
-            inside_radius: float = 0.0,
-            r_resolution: int = 10,
-            phi_resolution: int = 50,
+        self,
+        T_s: np.ndarray,
+        outside_radius: float,
+        inside_radius: float = 0.0,
+        r_resolution: int = 10,
+        phi_resolution: int = 50,
     ) -> pv.StructuredGrid:
         mesh_points = self.rod_mesh_points_fun(
             jnp.array(T_s),

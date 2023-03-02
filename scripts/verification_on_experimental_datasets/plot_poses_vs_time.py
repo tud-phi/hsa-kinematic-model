@@ -157,7 +157,6 @@ def plot_position_vs_time():
         label=r"$z_{\mathrm{d}}$",
     )
 
-
     plt.xlabel(r"Sample index $t$ [-]")
     plt.ylabel(r"Position in $\{ S_{\mathcal{B}}\}$ frame [mm]")
     plt.grid(True)
@@ -165,8 +164,8 @@ def plot_position_vs_time():
     # plt.legend(ncol=2, loc="upper right")
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(
-        handles[int(len(labels) // 2):],
-        labels[int(len(labels) // 2):],
+        handles[int(len(labels) // 2) :],
+        labels[int(len(labels) // 2) :],
         loc="upper right",
         ncol=2,
     )
@@ -301,13 +300,42 @@ def plot_euler_xyz_vs_time():
     # plt.plot(sss_idx, euler_xyz_ss[:, 0, 0], linewidth=linewidth_gt, label=r"$x_{0}$")
     # plt.plot(sss_idx, euler_xyz_ss[:, 1, 0], linewidth=linewidth_gt, label=r"$y_{0}$")
     # plt.plot(sss_idx, euler_xyz_ss[:, 2, 0], linewidth=linewidth_gt, label=r"$z_{0}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 0, 1], linewidth=linewidth_gt, label=r"$\alpha_{\mathrm{r}}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 1, 1], linewidth=linewidth_gt, label=r"$\beta_{\mathrm{r}}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 2, 1], linewidth=linewidth_gt, label=r"$\gamma_{\mathrm{r}}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 0, 2], linewidth=linewidth_gt, label=r"$\alpha_{\mathrm{t}}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 1, 2], linewidth=linewidth_gt, label=r"$\beta_{\mathrm{t}}$")
-    plt.plot(sss_idx, euler_xyz_ss[:, 2, 2], linewidth=linewidth_gt, label=r"$\gamma_{\mathrm{t}}$")
-
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 0, 1],
+        linewidth=linewidth_gt,
+        label=r"$\alpha_{\mathrm{r}}$",
+    )
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 1, 1],
+        linewidth=linewidth_gt,
+        label=r"$\beta_{\mathrm{r}}$",
+    )
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 2, 1],
+        linewidth=linewidth_gt,
+        label=r"$\gamma_{\mathrm{r}}$",
+    )
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 0, 2],
+        linewidth=linewidth_gt,
+        label=r"$\alpha_{\mathrm{t}}$",
+    )
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 1, 2],
+        linewidth=linewidth_gt,
+        label=r"$\beta_{\mathrm{t}}$",
+    )
+    plt.plot(
+        sss_idx,
+        euler_xyz_ss[:, 2, 2],
+        linewidth=linewidth_gt,
+        label=r"$\gamma_{\mathrm{t}}$",
+    )
 
     plt.xlabel(r"Sample index $t$ [-]")
     plt.ylabel(r"Euler XYZ angles in $\{ S_{\mathcal{B}}\}$ frame [rad]")
@@ -315,8 +343,8 @@ def plot_euler_xyz_vs_time():
 
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(
-        handles[int(len(labels) // 2):],
-        labels[int(len(labels) // 2):],
+        handles[int(len(labels) // 2) :],
+        labels[int(len(labels) // 2) :],
         loc="upper right",
         ncol=2,
     )

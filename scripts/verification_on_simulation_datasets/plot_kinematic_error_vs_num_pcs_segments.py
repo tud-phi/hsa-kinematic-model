@@ -25,7 +25,7 @@ DATASET_NAMES = {
 }
 MAX_NUM_SEGMENTS = 5
 
-color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
+color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
 if __name__ == "__main__":
     results = {}
@@ -34,7 +34,9 @@ if __name__ == "__main__":
         dataset_results = defaultdict(list)
 
         for num_segments in range(1, MAX_NUM_SEGMENTS + 1):
-            results_path = dataset_dir / f"inverse_kinematics_results_spcs_n_S-{num_segments}.npz"
+            results_path = (
+                dataset_dir / f"inverse_kinematics_results_spcs_n_S-{num_segments}.npz"
+            )
             data = jnp.load(str(results_path))
 
             dataset_results["num_segments"].append(num_segments)
@@ -44,13 +46,16 @@ if __name__ == "__main__":
 
         results[trajectory_name] = dataset_results
 
-    fig, ax = plt.subplots(num="Kinematic position error vs. number of PCS segments", figsize=(4.5, 2.5))
+    fig, ax = plt.subplots(
+        num="Kinematic position error vs. number of PCS segments", figsize=(4.5, 2.5)
+    )
     for traj_idx, (trajectory_name, dataset_results) in enumerate(results.items()):
         ax.plot(
             dataset_results["num_segments"],
             jnp.array(dataset_results["rmse_t"]) * 1000,
             color=color_cycle[traj_idx],
-            linestyle="solid", marker="o",
+            linestyle="solid",
+            marker="o",
             label=trajectory_name.capitalize(),
         )
     ax.set_xlabel(r"Number of PCS segments $n_\mathrm{S}$")
@@ -60,13 +65,16 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.show()
 
-    fig, ax = plt.subplots(num="Kinematic rotation error vs. number of PCS segments", figsize=(4.5, 2.5))
+    fig, ax = plt.subplots(
+        num="Kinematic rotation error vs. number of PCS segments", figsize=(4.5, 2.5)
+    )
     for traj_idx, (trajectory_name, dataset_results) in enumerate(results.items()):
         ax.plot(
             dataset_results["num_segments"],
             jnp.array(dataset_results["rmse_quat"]),
             color=color_cycle[traj_idx],
-            linestyle="solid", marker="o",
+            linestyle="solid",
+            marker="o",
             label=trajectory_name.capitalize(),
         )
     ax.set_xlabel(r"Number of PCS segments $n_\mathrm{S}$")

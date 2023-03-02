@@ -108,7 +108,7 @@ def plot_experimental_dataset(
     # plt.show()
 
     fig, ax1 = plt.subplots(num="Movement of platform")
-    color_cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     ax1.plot(
         time_ts,
         T_bp_ts[:, 0, 3] * 1e3,
@@ -131,7 +131,9 @@ def plot_experimental_dataset(
     ax1.set_xlabel(r"Time [s]")
     ax1.set_ylabel(r"Position [mm]")
     ax2 = ax1.twinx()
-    xyz_euler_angles = xyz_euler_angles = Rotation.from_matrix(T_bp_ts[:, :3, :3]).as_euler("xyz", degrees=False)
+    xyz_euler_angles = xyz_euler_angles = Rotation.from_matrix(
+        T_bp_ts[:, :3, :3]
+    ).as_euler("xyz", degrees=False)
     ax2.plot(
         time_ts,
         xyz_euler_angles[:, 0] / jnp.pi * 180,

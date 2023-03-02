@@ -44,29 +44,37 @@ vspcs_forward_kinematics = jit(
     )
 )
 
-matmul_vmap_both = jit(vmap(  # vmap for time
-    vmap(jnp.matmul, in_axes=(-1, -1), out_axes=-1),  # vmap for points
-    in_axes=(0, 0),
-    out_axes=0,
-))
+matmul_vmap_both = jit(
+    vmap(  # vmap for time
+        vmap(jnp.matmul, in_axes=(-1, -1), out_axes=-1),  # vmap for points
+        in_axes=(0, 0),
+        out_axes=0,
+    )
+)
 
-matmul_vmap_front = jit(vmap(  # vmap for time
-    vmap(jnp.matmul, in_axes=(-1, None), out_axes=-1),  # vmap for points
-    in_axes=(0, None),
-    out_axes=0,
-))
+matmul_vmap_front = jit(
+    vmap(  # vmap for time
+        vmap(jnp.matmul, in_axes=(-1, None), out_axes=-1),  # vmap for points
+        in_axes=(0, None),
+        out_axes=0,
+    )
+)
 
-matmul_vmap_back = jit(vmap(  # vmap for time
-    vmap(jnp.matmul, in_axes=(None, -1), out_axes=-1),  # vmap for points
-    in_axes=(None, 0),
-    out_axes=0,
-))
+matmul_vmap_back = jit(
+    vmap(  # vmap for time
+        vmap(jnp.matmul, in_axes=(None, -1), out_axes=-1),  # vmap for points
+        in_axes=(None, 0),
+        out_axes=0,
+    )
+)
 
-matmul_vmap_time_back = jit(vmap(  # vmap for time
-    vmap(jnp.matmul, in_axes=(None, -1), out_axes=-1),  # vmap for points
-    in_axes=(0, 0),
-    out_axes=0,
-))
+matmul_vmap_time_back = jit(
+    vmap(  # vmap for time
+        vmap(jnp.matmul, in_axes=(None, -1), out_axes=-1),  # vmap for points
+        in_axes=(0, 0),
+        out_axes=0,
+    )
+)
 
 if __name__ == "__main__":
     kinematics = SelectivePiecewiseConstantStrain(
@@ -79,7 +87,9 @@ if __name__ == "__main__":
     # clean implementation
     # s_plotting = jnp.linspace(start=0, stop=l0.sum(), num=100)
     # slightly dirty implementation to get ring pose aligned with the orientation arrows we are plotting
-    s_plotting_part1 = jnp.linspace(start=s_ss[0, 0], stop=s_ss[0, 1], num=49, endpoint=False)
+    s_plotting_part1 = jnp.linspace(
+        start=s_ss[0, 0], stop=s_ss[0, 1], num=49, endpoint=False
+    )
     s_plotting_part2 = jnp.linspace(start=s_ss[0, 1], stop=s_ss[0, 2], num=51)
     s_plotting = jnp.concatenate([s_plotting_part1, s_plotting_part2])
 
@@ -94,9 +104,11 @@ if __name__ == "__main__":
     )
 
     # compute points for rigid proximal end
-    s_rigid_proximal_end = jnp.linspace(
-        start=0, stop=25e-3, num=10
-    ).reshape(1, -1).repeat(T_hat_plotting_ss.shape[0], axis=0)
+    s_rigid_proximal_end = (
+        jnp.linspace(start=0, stop=25e-3, num=10)
+        .reshape(1, -1)
+        .repeat(T_hat_plotting_ss.shape[0], axis=0)
+    )
     T_rigid_proximal_end = T_hat_plotting_ss[..., 0:1].repeat(
         repeats=s_rigid_proximal_end.shape[-1], axis=-1
     )
@@ -111,35 +123,40 @@ if __name__ == "__main__":
     T_hat_plotting_ss = matmul_vmap_back(T_rigid_offset, T_hat_plotting_ss)
 
     # add points of rigid ends
-    T_hat_plotting_ss = jnp.concatenate([T_rigid_proximal_end, T_hat_plotting_ss], axis=-1)
+    T_hat_plotting_ss = jnp.concatenate(
+        [T_rigid_proximal_end, T_hat_plotting_ss], axis=-1
+    )
 
     # offset of rod base with respect to global world frame
-    T_base_offset = jnp.array([[1, 0, 0, -24e-3], [0, 1, 0, -24e-3], [0, 0, 1, 0.0], [0, 0, 0, 1]])
+    T_base_offset = jnp.array(
+        [[1, 0, 0, -24e-3], [0, 1, 0, -24e-3], [0, 0, 1, 0.0], [0, 0, 0, 1]]
+    )
     T_ss = matmul_vmap_back(T_base_offset, T_ss)
     T_hat_plotting_ss = matmul_vmap_back(T_base_offset, T_hat_plotting_ss)
 
     # compute points for rigid distal end
-    s_rigid_distal_end = jnp.linspace(
-        start=0, stop=20e-3, num=10
-    ).reshape(1, -1).repeat(T_hat_plotting_ss.shape[0], axis=0)
-    T_rigid_distal_end = jnp.eye(4).reshape(1, 4, 4, 1).repeat(
-        repeats=s_rigid_distal_end.shape[-1], axis=-1
-    ).repeat(
-        repeats=s_rigid_distal_end.shape[0], axis=0
+    s_rigid_distal_end = (
+        jnp.linspace(start=0, stop=20e-3, num=10)
+        .reshape(1, -1)
+        .repeat(T_hat_plotting_ss.shape[0], axis=0)
     )
-    T_rigid_distal_end = T_rigid_distal_end.at[..., 2, 3, :].add(
-        s_rigid_distal_end
+    T_rigid_distal_end = (
+        jnp.eye(4)
+        .reshape(1, 4, 4, 1)
+        .repeat(repeats=s_rigid_distal_end.shape[-1], axis=-1)
+        .repeat(repeats=s_rigid_distal_end.shape[0], axis=0)
     )
-    T_rigid_distal_end = matmul_vmap_time_back(T_hat_plotting_ss[..., -1], T_rigid_distal_end)
-    T_hat_plotting_ss = jnp.concatenate([T_hat_plotting_ss, T_rigid_distal_end], axis=-1)
+    T_rigid_distal_end = T_rigid_distal_end.at[..., 2, 3, :].add(s_rigid_distal_end)
+    T_rigid_distal_end = matmul_vmap_time_back(
+        T_hat_plotting_ss[..., -1], T_rigid_distal_end
+    )
+    T_hat_plotting_ss = jnp.concatenate(
+        [T_hat_plotting_ss, T_rigid_distal_end], axis=-1
+    )
 
     # indices of orientation arrows for kinematics
     orientation_arrow_indices = s_rigid_proximal_end.shape[-1] + jnp.linspace(
-        start=0,
-        stop=s_plotting.shape[-1],
-        num=11,
-        endpoint=True,
-        dtype=int
+        start=0, stop=s_plotting.shape[-1], num=11, endpoint=True, dtype=int
     )
 
     pv_scene = PyvistaScene(

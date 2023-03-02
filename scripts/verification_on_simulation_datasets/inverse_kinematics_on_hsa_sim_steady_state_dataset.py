@@ -43,7 +43,9 @@ NUM_PCS_SEGMENTS = 2
 STRAIN_SELECTOR_CS = jnp.array([False, False, True, False, False, True])
 STRAIN_SELECTOR_PCS = jnp.array([True, True, False, True, True, False])
 
-GAMMA = 2e-1 * jnp.ones((1 + STRAIN_SELECTOR_CS.sum() + NUM_PCS_SEGMENTS * STRAIN_SELECTOR_PCS.sum(),))
+GAMMA = 2e-1 * jnp.ones(
+    (1 + STRAIN_SELECTOR_CS.sum() + NUM_PCS_SEGMENTS * STRAIN_SELECTOR_PCS.sum(),)
+)
 # Nominal
 GAMMA = GAMMA.at[1].mul(5.0)
 # For only PCS
@@ -90,8 +92,9 @@ if __name__ == "__main__":
                 strain_selector_pcs=STRAIN_SELECTOR_PCS,
             )
         else:
-            assert jnp.allclose(L0, kinematics.l0.sum()), \
-            f"Rod printed length ({L0}) changed with respect to initialized kinematics ({kinematics.l0.sum()})!"
+            assert jnp.allclose(
+                L0, kinematics.l0.sum()
+            ), f"Rod printed length ({L0}) changed with respect to initialized kinematics ({kinematics.l0.sum()})!"
 
         for rod_idx, j in enumerate(ROD_INDICES):
             print(
@@ -151,7 +154,8 @@ if __name__ == "__main__":
             tmp_output_data["rmse_euler_xyz_ss"].append(rmse_euler_xyz)
 
             if PLOT_INVERSE_KINEMATICS and (
-                sample_idx % PLOT_EVERY_NTH_SAMPLE == 0 or sample_idx == len(subfolders_list) - 1
+                sample_idx % PLOT_EVERY_NTH_SAMPLE == 0
+                or sample_idx == len(subfolders_list) - 1
             ):
                 # plot the ground-truth and the estimated rod shape
                 plot_rod_shape(T=T, T_hat=T_hat, oal=0.01)
@@ -171,11 +175,17 @@ if __name__ == "__main__":
     output_data["rest_strain"] = kinematics.rest_strain
 
     # compute total error
-    output_data["rmse_t"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_t_ss'], 2)))
-    output_data["rmse_quat"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_quat_ss'], 2)))
-    output_data["rmse_euler_xyz"] = jnp.sqrt(jnp.mean(jnp.power(output_data['rmse_euler_xyz_ss'], 2), axis=0))
+    output_data["rmse_t"] = jnp.sqrt(jnp.mean(jnp.power(output_data["rmse_t_ss"], 2)))
+    output_data["rmse_quat"] = jnp.sqrt(
+        jnp.mean(jnp.power(output_data["rmse_quat_ss"], 2))
+    )
+    output_data["rmse_euler_xyz"] = jnp.sqrt(
+        jnp.mean(jnp.power(output_data["rmse_euler_xyz_ss"], 2), axis=0)
+    )
 
-    inverse_kinematics_results_path = str(dataset_dir / f"inverse_kinematics_results{kinematic_settings_postfix}.npz")
+    inverse_kinematics_results_path = str(
+        dataset_dir / f"inverse_kinematics_results{kinematic_settings_postfix}.npz"
+    )
     jnp.savez(
         inverse_kinematics_results_path,
         **output_data,
