@@ -12,6 +12,8 @@ DATASET_DIR = Path("data/experiments/20221012_153814")  # lemniscate to 210°
 # DATASET_DIR = Path("data/experiments/20221012_103309")  # twisting to 180°
 # DATASET_DIR = Path("data/experiments/20221012_140717")  # combined to 180°
 
+DATASET_NAME = "lemniscate"
+
 # load data
 data = jnp.load(str(DATASET_DIR / "inverse_kinematics_results_spcs_n_S-2.npz"))
 
@@ -168,7 +170,7 @@ if __name__ == "__main__":
     pv_scene.animate(
         T_gt_ts=T_ss,
         T_hat_ts=T_hat_plotting_ss,
-        filepath=f"scripts/verification_on_experimental_datasets/videos/{dataset_name}.mp4",
+        filepath=f"scripts/verification_on_experimental_datasets/videos/{DATASET_NAME}.mp4",
         sample_rate=10,
         frame_rate=10,
     )
