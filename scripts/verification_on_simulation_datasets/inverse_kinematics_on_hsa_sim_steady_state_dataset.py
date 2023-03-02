@@ -4,9 +4,6 @@ Run inverse kinematics on a dataset for the steady-states of the simulated HSA r
 from collections import defaultdict
 from spcs_kinematics.kinematic_parametrizations import SelectivePiecewiseConstantStrain
 import spcs_kinematics.jax_math as jmath
-from hsa_sim.utils.data_mapping_utils import (
-    simulation_diagnostic_arrays_to_transformation_matrices,
-)
 import jax
 from jax import numpy as jnp
 from natsort import natsorted
@@ -14,6 +11,7 @@ import pathlib
 from typing import *
 import yaml
 
+from src.utils import sim_diagnostic_arrays_to_transformation_matrices
 from src.visualization import (
     plot_rod_shape,
     plot_inverse_kinematics_iterations,
@@ -34,9 +32,7 @@ dataset_name = "20221025_170312_elongation_seed-101_100-samples"
 # dataset_name = "20221025_214951_twisting_seed-101_200-samples"
 # dataset_name = "20221025_220436_combined_seed-101_500-samples"
 
-dataset_dir = pathlib.Path(
-    f"../hsa_sim/data/hsa_robot/kinematic_steady_state_datasets/{dataset_name}"
-)
+dataset_dir = pathlib.Path("data") / "simulations" / dataset_name
 
 # either int to select rod_idx or None to select all rods
 ROD_INDICES = jnp.arange(start=0, stop=4)
@@ -77,7 +73,7 @@ if __name__ == "__main__":
 
         rod_diagnostic_arrays = jnp.load(f"{str(sample_dir)}/rod_diagnostic_arrays.npz")
         # transform diagnostic arrays to transformation matrices
-        T_ts, _ = simulation_diagnostic_arrays_to_transformation_matrices(
+        T_ts, _ = sim_diagnostic_arrays_to_transformation_matrices(
             rod_diagnostic_arrays=rod_diagnostic_arrays
         )
         # construct jnp array

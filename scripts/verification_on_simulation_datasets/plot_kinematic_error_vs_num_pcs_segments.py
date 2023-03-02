@@ -15,7 +15,7 @@ plt.rcParams.update(
     }
 )
 
-datasets_dir = Path("scripts/verification_on_simulation_datasets/plotting_data")
+datasets_dir = Path("data") / "simulations"
 DATASET_NAMES = {
     "elongation": "20221025_170312_elongation_seed-101_100-samples",
     "circles": "20221025_170335_bending_seed-101_225-samples",
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         dataset_results = defaultdict(list)
 
         for num_segments in range(1, MAX_NUM_SEGMENTS + 1):
-            results_path = dataset_dir / f"inverse_kinematics_results_hsa_pcs_v2_n_S-{num_segments}.npz"
+            results_path = dataset_dir / f"inverse_kinematics_results_spcs_n_S-{num_segments}.npz"
             data = jnp.load(str(results_path))
 
             dataset_results["num_segments"].append(num_segments)

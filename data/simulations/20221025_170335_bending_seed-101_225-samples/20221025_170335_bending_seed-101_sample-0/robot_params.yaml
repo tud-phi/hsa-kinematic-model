@@ -1,0 +1,93 @@
+L0: 0.10300000000000001
+num_rods_per_segment: 4
+segment_idx: 1
+segments:
+- L0: 0.10300000000000001
+  platform:
+    density: 700.0
+    radius: 0.0475
+    thickness: 0.003
+  printed_length: 0.1
+  rods:
+  - bend_rigidity: 0.02
+    elastic_modulus: 10000000.0
+    elastic_modulus_scale_factor: 0.0
+    handedness: right
+    material_density: 1050.0
+    max_actuation_torque: 0.5
+    name: HSA_ROD_ROBOT_SIM
+    num_elements: 25
+    outside_radius: 0.0127
+    phi: 0.7853981633974483
+    printed_length: 0.1
+    radial_offset: 0.024
+    rest_lengths_scale_factor: 0.01
+    rod_idx: 0
+    rotational_damping_constant: &id001
+    - 5.0
+    - 5.0
+    - 7.0
+    shear_modulus: 800000.0
+    translational_damping_constant: &id002
+    - 8000.0
+    - 8000.0
+    - 10000.0
+    twist_rigidity: 0.014
+    wall_thickness: 0.00243
+  - bend_rigidity: 0.02
+    elastic_modulus: 10000000.0
+    elastic_modulus_scale_factor: 0.0
+    handedness: left
+    material_density: 1050.0
+    max_actuation_torque: 0.5
+    name: HSA_ROD_ROBOT_SIM
+    num_elements: 25
+    outside_radius: 0.0127
+    phi: 2.356194490192345
+    printed_length: 0.1
+    radial_offset: 0.024
+    rest_lengths_scale_factor: 0.01
+    rod_idx: 1
+    rotational_damping_constant: *id001
+    shear_modulus: 800000.0
+    translational_damping_constant: *id002
+    twist_rigidity: 0.014
+    wall_thickness: 0.00243
+  - bend_rigidity: 0.02
+    elastic_modulus: 10000000.0
+    elastic_modulus_scale_factor: 0.0
+    handedness: right
+    material_density: 1050.0
+    max_actuation_torque: 0.5
+    name: HSA_ROD_ROBOT_SIM
+    num_elements: 25
+    outside_radius: 0.0127
+    phi: 3.9269908169872414
+    printed_length: 0.1
+    radial_offset: 0.024
+    rest_lengths_scale_factor: 0.01
+    rod_idx: 2
+    rotational_damping_constant: *id001
+    shear_modulus: 800000.0
+    translational_damping_constant: *id002
+    twist_rigidity: 0.014
+    wall_thickness: 0.00243
+  - bend_rigidity: 0.02
+    elastic_modulus: 10000000.0
+    elastic_modulus_scale_factor: 0.0
+    handedness: left
+    material_density: 1050.0
+    max_actuation_torque: 0.5
+    name: HSA_ROD_ROBOT_SIM
+    num_elements: 25
+    outside_radius: 0.0127
+    phi: 5.497787143782138
+    printed_length: 0.1
+    radial_offset: 0.024
+    rest_lengths_scale_factor: 0.01
+    rod_idx: 3
+    rotational_damping_constant: *id001
+    shear_modulus: 800000.0
+    translational_damping_constant: *id002
+    twist_rigidity: 0.014
+    wall_thickness: 0.00243

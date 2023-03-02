@@ -3,8 +3,8 @@ jax-spcs-kinematics
 matplotlib~=3.7.0
 numpy~=1.21.6
 PyYAML~=6.0
-pyvista~=0.35.2
-seaborn~=0.11.2
-natsort~=8.2.0
+pyvista~=0.38.3
+seaborn~=0.12.2
+natsort~=8.3.1
 scipy~=1.10.1
-pandas~=1.4.3
+pandas~=1.5.3
