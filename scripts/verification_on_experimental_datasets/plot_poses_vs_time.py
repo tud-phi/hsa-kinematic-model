@@ -370,6 +370,8 @@ def plot_estimated_configuration_vs_time():
     plt.plot(sss_idx, q_hat_ss[:, 9], label=r"$\hat{\sigma}_{x,2}$")
     plt.plot(sss_idx, q_hat_ss[:, 10], label=r"$\hat{\sigma}_{y,2}$")
 
+    plt.xlabel(r"Sample index $t$ [-]")
+    plt.ylabel(r"Estimated configuration $\hat{q}$")
     plt.legend()
     plt.grid(True)
     plt.box(True)
