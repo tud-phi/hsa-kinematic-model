@@ -17,8 +17,8 @@ plt.rcParams.update(
 )
 
 # DATASET_DIR = Path("data/experiments/20221011_174514")  # elongation to 180°
-# DATASET_DIR = Path("data/experiments/20221011_184131")  # bending to 180°
-DATASET_DIR = Path("data/experiments/20221012_153814")  # lemniscate to 210°
+DATASET_DIR = Path("data/experiments/20221011_184131")  # bending to 180°
+# DATASET_DIR = Path("data/experiments/20221012_153814")  # lemniscate to 210°
 # DATASET_DIR = Path("data/experiments/20221012_103309")  # twisting to 180°
 # DATASET_DIR = Path("data/experiments/20221012_140717")  # combined to 180°
 
@@ -29,6 +29,7 @@ data = jnp.load(str(DATASET_DIR / "inverse_kinematics_results_spcs_n_S-2.npz"))
 num_cut_off_samples = 1
 T_ss = data["T_ss"][:-num_cut_off_samples]
 T_hat_ss = data["T_hat_ss"][:-num_cut_off_samples]
+q_hat_ss = data["q_hat_ss"][:-num_cut_off_samples]
 sss_idx = jnp.arange(T_ss.shape[0])
 
 
@@ -353,7 +354,32 @@ def plot_euler_xyz_vs_time():
     plt.show()
 
 
+def plot_estimated_configuration_vs_time():
+    plt.figure(figsize=(4.5, 3))
+    ax = plt.gca()
+
+    # for i in range(q_hat_ss.shape[-1]):
+    #     plt.plot(sss_idx, q_hat_ss[:, i], label=r"$\hat{q}_{" + str(i + 1) + "}$")
+    # q = [phi0, kappa_z, sigma_z, kappa_x1, kappa_y1, sigma_x1, sigma_y1, kappa_x2, kappa_y2, sigma_x2, sigma_y2]
+    plt.plot(sss_idx, q_hat_ss[:, 3], label=r"$\hat{\kappa}_{x,1}$")
+    plt.plot(sss_idx, q_hat_ss[:, 4], label=r"$\hat{\kappa}_{y,1}$")
+    plt.plot(sss_idx, q_hat_ss[:, 5], label=r"$\hat{\sigma}_{x,1}$")
+    plt.plot(sss_idx, q_hat_ss[:, 6], label=r"$\hat{\sigma}_{y,1}$")
+    plt.plot(sss_idx, q_hat_ss[:, 7], label=r"$\hat{\kappa}_{x,2}$")
+    plt.plot(sss_idx, q_hat_ss[:, 8], label=r"$\hat{\kappa}_{y,2}$")
+    plt.plot(sss_idx, q_hat_ss[:, 9], label=r"$\hat{\sigma}_{x,2}$")
+    plt.plot(sss_idx, q_hat_ss[:, 10], label=r"$\hat{\sigma}_{y,2}$")
+
+    plt.legend()
+    plt.grid(True)
+    plt.box(True)
+
+    plt.tight_layout()
+    plt.show()
+
+
 if __name__ == "__main__":
     plot_position_vs_time()
     plot_position_error_vs_time()
     plot_euler_xyz_vs_time()
+    plot_estimated_configuration_vs_time()
