@@ -38,8 +38,8 @@ pip install -r requirements.txt
 
 You might also be interested in the following repositories:
 
- - The [`jax-spcs-kinematics`](https://github.com/tud-cor-sr/jax-spcs-kinematics) repository contains an implementation
+ - The [`jax-spcs-kinematics`](https://github.com/tud-phi/jax-spcs-kinematics) repository contains an implementation
  of the Selective Piecewise Constant Strain (SPCS) kinematics in JAX. We have shown in our paper that this kinematic 
 model is suitable for representing the shape of HSA rods.
- - The [`HSA-PyElastica`](https://github.com/tud-cor-sr/HSA-PyElastica) repository contains a plugin for PyElastica
+ - The [`HSA-PyElastica`](https://github.com/tud-phi/HSA-PyElastica) repository contains a plugin for PyElastica
 for the simulation of HSA robots.
