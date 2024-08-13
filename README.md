@@ -3,7 +3,7 @@
 This repository contains code for verifying the Selective Piecewise Constant Strain (SPCS) kinematic model for representing
 the shape of the rods making up HSA robots.
 This model allows us to keep the twist and axial strains constant throughout the robot, while the bending and shear strains 
-vary piecewise. We refer to the [publication](##Citation) for more details.
+vary piecewise.
 
 A JAX implementation of SPCS can be found [here](https://github.com/tud-cor-sr/jax-spcs-kinematics) and is used in the scripts of this repository.
 
